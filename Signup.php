@@ -34,7 +34,8 @@
       }
       if(!$resempty && $password==$cpassword ){
         if(!$dusername){
-          $sql = "INSERT INTO `users`( `Username`, `Password`) VALUES ('$usname','$password')";
+          $hPassword = password_hash($password, PASSWORD_DEFAULT);
+          $sql = "INSERT INTO `users`( `Username`, `Password`) VALUES ('$usname','$hPassword')";
         if (mysqli_query($conn, $sql)) {
           $regissuccess=true;
         } else {

@@ -16,15 +16,22 @@
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $usname=$_POST["uname"];
       $password=$_POST["Password"];
-      $sql="SELECT * FROM users WHERE Username = '{$usname}' AND Password = '{$password}'";
+      $sql="SELECT * FROM users WHERE Username = '{$usname}'";
       $result = mysqli_query($conn, $sql);
-      if (mysqli_num_rows($result) == 1) {
-        $login=true;
-        session_start(); //starting the session
+      $rowno=mysqli_num_rows($result);
+
+
+      if ($rowno == 1) {
+        while($row=mysqli_fetch_assoc($result)){
+          if (password_verify($password, $row['Password'])){
+            $login=true;
+            session_start(); //starting the session
         $_SESSION["loggedIn"]=true; 
         $_SESSION["username"]=$usname;
         header("Location: Welcome.php");
         exit;
+          }
+        } 
       }else{
         $error=true;
       }
